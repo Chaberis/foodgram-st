@@ -35,6 +35,7 @@ def fix_media_url(url, request=None):
 
     return url
 
+
 User = get_user_model()
 
 

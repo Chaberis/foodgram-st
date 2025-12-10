@@ -138,7 +138,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def download_shopping_cart(self, request):
         """Скачивание списка покупок."""
 
-
         user = request.user
         cart_recipes = ShoppingCart.objects.filter(user=user).select_related(
             'recipe'
