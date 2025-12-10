@@ -105,6 +105,12 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+# OS Generated files (Windows & Mac)
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
 # Environments
 .env
 .venv
@@ -140,3 +146,4 @@ dmypy.json
 
 static/
 media/
+/.vscode

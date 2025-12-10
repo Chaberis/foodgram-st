@@ -1,0 +1,102 @@
+name: Foodgram CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: django_user
+          POSTGRES_PASSWORD: secretpassword
+          POSTGRES_DB: django
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip 
+        pip install ruff
+        pip install -r ./backend/requirements.txt
+    - name: Linting and Testing
+      env:
+        POSTGRES_USER: django_user
+        POSTGRES_PASSWORD: secretpassword
+        POSTGRES_DB: django
+        DB_HOST: 127.0.0.1
+        DB_PORT: 5432
+      run: |
+        python -m ruff check backend/
+        cd backend/
+        python manage.py test
+
+  build_and_push_backend:
+    name: Push Backend to DockerHub
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend/
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
+
+  build_and_push_frontend:
+    name: Push Frontend to DockerHub
+    runs-on: ubuntu-latest
+    needs: build_and_push_backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend/
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:latest
+
+  notify_telegram:
+    runs-on: ubuntu-latest
+    needs:
+      - build_and_push_backend
+      - build_and_push_frontend
+    steps:
+      - name: Send Telegram Notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ${{ github.workflow }} completed successfully!
+            Repository: ${{ github.repository }}
+            Commit: ${{ github.sha }}
