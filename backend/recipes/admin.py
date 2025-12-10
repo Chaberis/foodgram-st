@@ -4,7 +4,7 @@ from .models import Recipe, RecipeIngredient, ShoppingCart, Favorite
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display =(
+    list_display = (
         'id',
         'name',
         'author',
