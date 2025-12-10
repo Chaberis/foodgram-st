@@ -12,7 +12,7 @@ def fix_media_url(url, request=None):
     """Исправляет URL медиафайла, добавляя порт 8080 если его нет."""
     if not url:
         return url
-    
+
     # Если URL уже абсолютный
     if url.startswith('http://'):
         # Заменяем localhost без порта или с другим портом на localhost:8080
@@ -22,7 +22,7 @@ def fix_media_url(url, request=None):
         # Заменяем http://127.0.0.1/ или http://127.0.0.1:8000/ на http://127.0.0.1:8080/
         url = re.sub(r'http://127\.0\.0\.1(?!:8080)(?::\d+)?/', 'http://127.0.0.1:8080/', url)
         return url
-    
+
     # Если URL относительный, делаем его абсолютным с портом
     if url.startswith('/media/'):
         if request:
@@ -35,7 +35,7 @@ def fix_media_url(url, request=None):
             return base_url.rstrip('/') + url
         else:
             return f'http://localhost:8080{url}'
-    
+
     return url
 
 
@@ -142,7 +142,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         validate_recipe_image(self, self.initial_data)
 
         validate_recipe_ingredients_present(self, self.initial_data)
-        
+
         return attrs
 
     def validate_ingredients(self, value):
@@ -215,4 +215,3 @@ class RecipeMinifiedSerializer(serializers.ModelSerializer):
                 return fix_media_url(url, request)
             return fix_media_url(obj.image.url)
         return None
-

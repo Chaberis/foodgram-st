@@ -16,7 +16,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('created', 'cooking_time', 'author')
     readonly_fields = ('created',)
     filter_horizontal = ()
-    
+
     fieldsets = (
         ('Основная информация', {
             'fields': ('name', 'author', 'text', 'image', 'cooking_time')
@@ -25,15 +25,15 @@ class RecipeAdmin(admin.ModelAdmin):
             'fields': ('created',)
         }),
     )
-    
+
     def favorites_count(self, obj):
         return obj.favorites.count()
     favorites_count.short_description = 'Кол-во в избранном'
-    
+
     def shopping_cart_count(self, obj):
         return obj.shopping_cart.count()
     shopping_cart_count.short_description = 'Кол-во в корзине'
-    
+
     def ingredients_count(self, obj):
         return obj.recipe_ingredients.count()
     ingredients_count.short_description = 'Кол-во ингредиентов'

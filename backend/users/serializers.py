@@ -9,7 +9,7 @@ def fix_media_url(url, request=None):
     """Исправляет URL медиафайла, добавляя порт 8080 если его нет."""
     if not url:
         return url
-    
+
     # Если URL уже абсолютный
     if url.startswith('http://'):
         # Заменяем localhost без порта или с другим портом на localhost:8080
@@ -19,7 +19,7 @@ def fix_media_url(url, request=None):
         # Заменяем http://127.0.0.1/ или http://127.0.0.1:8000/ на http://127.0.0.1:8080/
         url = re.sub(r'http://127\.0\.0\.1(?!:8080)(?::\d+)?/', 'http://127.0.0.1:8080/', url)
         return url
-    
+
     # Если URL относительный, делаем его абсолютным с портом
     if url.startswith('/media/'):
         if request:
@@ -32,7 +32,7 @@ def fix_media_url(url, request=None):
             return base_url.rstrip('/') + url
         else:
             return f'http://localhost:8080{url}'
-    
+
     return url
 
 User = get_user_model()
@@ -191,7 +191,7 @@ class UserWithRecipesSerializer(serializers.ModelSerializer):
         recipes = obj.recipes.all()
         if recipes_limit:
             recipes = recipes[:recipes_limit]
-        
+
         return RecipeMinifiedSerializer(
             recipes,
             many=True,

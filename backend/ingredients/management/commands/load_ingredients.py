@@ -33,7 +33,6 @@ class Command(BaseCommand):
 
         # Определяем путь к файлу
         possible_paths = []
-        
         if file_path:
             if os.path.isabs(file_path):
                 # Абсолютный путь используем как есть
@@ -68,7 +67,7 @@ class Command(BaseCommand):
             if os.path.exists(normalized_path):
                 final_path = normalized_path
                 break
-        
+
         if not final_path:
             self.stdout.write(
                 self.style.ERROR('Файл не найден ни по одному из путей:')
@@ -84,7 +83,7 @@ class Command(BaseCommand):
                     self.style.WARNING(f'  - {os.path.normpath(path)}')
                 )
             return
-        
+
         file_path = final_path
 
         self.stdout.write(f'Загрузка ингредиентов из файла: {file_path}')
@@ -229,4 +228,3 @@ class Command(BaseCommand):
                 f'Ошибок: {error_count}'
             )
         )
-

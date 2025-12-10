@@ -1,17 +1,13 @@
 """Views для работы с рецептами."""
-from django.db.models import Sum
+from django.http import HttpResponse
+from django.utils import timezone
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from django.http import HttpResponse
-from django.utils import timezone
-from collections import defaultdict
 
-
-
-from .models import Recipe, ShoppingCart, Favorite, RecipeIngredient
+from .models import Recipe, ShoppingCart, Favorite
 from .serializers import (
     RecipeSerializer,
     RecipeCreateSerializer,
@@ -141,7 +137,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def download_shopping_cart(self, request):
         """Скачивание списка покупок."""
-        
+
 
         user = request.user
         cart_recipes = ShoppingCart.objects.filter(user=user).select_related(

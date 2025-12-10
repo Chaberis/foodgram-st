@@ -9,4 +9,3 @@ router.register(r'ingredients', IngredientViewSet, basename='ingredients')
 urlpatterns = [
     path('', include(router.urls)),
 ]
-

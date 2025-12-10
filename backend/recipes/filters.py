@@ -59,4 +59,3 @@ class RecipeFilter(filters.FilterSet):
             ).values_list('recipe_id', flat=True)
             return queryset.exclude(id__in=recipe_ids)
         return queryset
-

@@ -6,11 +6,11 @@ from ingredients.models import Ingredient
 def validate_recipe_image(serializer, initial_data):
     """
     Валидация изображения рецепта.
-    
+
     Args:
         serializer: Экземпляр сериализатора
         initial_data: Исходные данные запроса
-        
+
     Raises:
         ValidationError: Если изображение отсутствует или пустое
     """
@@ -24,11 +24,11 @@ def validate_recipe_image(serializer, initial_data):
 def validate_recipe_ingredients_present(serializer, initial_data):
     """
     Валидация наличия ингредиентов в запросе.
-    
+
     Args:
         serializer: Экземпляр сериализатора
         initial_data: Исходные данные запроса
-        
+
     Raises:
         ValidationError: Если поле ingredients отсутствует
     """
@@ -41,13 +41,13 @@ def validate_recipe_ingredients_present(serializer, initial_data):
 def validate_ingredients(value):
     """
     Валидация списка ингредиентов.
-    
+
     Args:
         value: Список словарей с ингредиентами
-        
+
     Returns:
         value: Валидированный список ингредиентов
-        
+
     Raises:
         ValidationError: Если ингредиенты невалидны
     """
@@ -55,7 +55,7 @@ def validate_ingredients(value):
         raise serializers.ValidationError(
             'Необходимо указать хотя бы один ингредиент.'
         )
-    
+
     ingredient_ids = [item['id'] for item in value]
 
     if len(ingredient_ids) != len(set(ingredient_ids)):
@@ -71,6 +71,5 @@ def validate_ingredients(value):
         raise serializers.ValidationError(
             f'Ингредиенты с id {list(missing_ids)} не найдены в базе данных.'
         )
-    
-    return value
 
+    return value

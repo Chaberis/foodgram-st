@@ -4,7 +4,7 @@ from .models import Ingredient
 
 class IngredientSerializer(serializers.ModelSerializer):
     """Сериализатор для ингредиента."""
-    
+
     class Meta:
         model = Ingredient
         fields = (
@@ -13,4 +13,3 @@ class IngredientSerializer(serializers.ModelSerializer):
             'measurement_unit',
         )
         read_only_fields = ('id',)
-
