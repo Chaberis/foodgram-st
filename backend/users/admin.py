@@ -20,7 +20,6 @@ class UserAdmin(BaseUserAdmin):
         'is_staff',
         'is_active'
     )
-
     search_fields = ('username', 'email', 'first_name', 'last_name')
     list_filter = ('is_staff', 'is_active', 'is_superuser', 'date_joined')
     readonly_fields = ('date_joined', 'last_login')
