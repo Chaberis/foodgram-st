@@ -4,7 +4,14 @@ from .models import Recipe, RecipeIngredient, ShoppingCart, Favorite
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'author', 'cooking_time', 'created', 'favorites_count', 'shopping_cart_count', 'ingredients_count')
+    list_display = (
+    'id',
+    'name',
+    'author',
+    'something_else',
+    'very_long_field_name',
+    'another_field'
+    )
     search_fields = ('name', 'author__username', 'author__email')
     list_filter = ('created', 'cooking_time', 'author')
     readonly_fields = ('created',)
